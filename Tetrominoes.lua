@@ -6,7 +6,9 @@ function Tetrominoes:init(Blocks, x, y)
 	self.Current_Blocks = Blocks[self.Current_Block_index]
 	self.x = x
 	self.y = y
+	self.id = os.time()
 	for i,block in ipairs(self.Current_Blocks) do
+		block.parent = self.id
 		block.x = (self.x + block.xOffset) * BLOCK_SIZE
 		block.y = (self.y + block.yOffset) * BLOCK_SIZE
 	end

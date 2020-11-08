@@ -5,6 +5,7 @@ function Block:init(x, y)
 	self.y = y 
 	self.xOffset = x
 	self.yOffset = y
+	self.parent = nil
 end
 
 --[[function Block:move(yOffset, xOffset)		-- Kept for Testing & debugging purposes, 

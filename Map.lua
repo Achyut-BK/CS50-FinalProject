@@ -55,6 +55,7 @@ function Map:update()
 			if self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE ] == 1 then
 				for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
 					self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE -1] = 1
+					print(Block.parent)
 				end	
 				self:newTetromino()
 			end
