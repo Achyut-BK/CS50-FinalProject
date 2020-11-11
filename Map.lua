@@ -1,5 +1,5 @@
 Map = Class{}
-
+UpdateLock = false
 function Map:init()
 	self.grid = {}
 	for x=1,SCREEN_WIDTH_BLOCKS do
@@ -50,8 +50,8 @@ function Map:render()
 end
 
 function Map:update()
-	if not Game_Over then
-
+	if not (Game_Over) and not(UpdateLock) then
+		UpdateLock = true
 		-- Erase
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
 			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
@@ -86,11 +86,37 @@ function Map:update()
 				break
 			end
 		end	
+		UpdateLock = false
 	end
 end
 
+function Map:rotateBlock(x)
+	if not UpdateLock then
+		UpdateLock = true
+		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
+		end
+
+		self.Current_Tetromino:rotate(x)
+
+		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
+			if  Block.y / BLOCK_SIZE + 1 > SCREEN_HEIGHT_BLOCKS then
+				self.Current_Tetromino:rotate(-x)
+				break
+			elseif self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE ] ~= 0 then
+				self.Current_Tetromino:rotate(-x)
+				break
+			end
+		end
+
+		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE ] = {self.Current_Tetromino.id}
+		end	
+		UpdateLock = false
+	end
+end
 function Map:newTetromino()
-	self.Current_Tetromino = Tetrominoes(positions[math.random(1, #positions)], 1, 0)
+	self.Current_Tetromino = Tetrominoes(positions[math.random(1, #positions)], 4, 0)
 	for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
 		if self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE ] ~= 0 then
 			Game_Over = true

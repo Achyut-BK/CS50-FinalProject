@@ -43,6 +43,9 @@ function love.update(dt)
 		map:update()
 		Timer = Timer - MOVE_INTERVAL
 	end
+	if love.keyboard.wasPressed('a') then
+		map:rotateBlock(1)
+	end
 	love.keyboard.keysPressed = {}
 end
 

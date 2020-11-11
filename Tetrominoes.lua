@@ -54,7 +54,6 @@ function Tetrominoes:rotate(x)
 		block.x = (self.x + block.xOffset) * BLOCK_SIZE
 		block.y = (self.y + block.yOffset) * BLOCK_SIZE
 	end
-
 end
 
 function Tetrominoes:getBlocks()
