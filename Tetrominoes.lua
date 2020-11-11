@@ -1,6 +1,6 @@
 Tetrominoes = Class{}
-i = 0
 
+Tetrominoes.i = 1
 function Tetrominoes:init(Blocks, x, y)
 	self.Blocks = Blocks
 	self.Current_Block_index =  1
@@ -12,12 +12,13 @@ function Tetrominoes:init(Blocks, x, y)
 		block.parent = self.id
 		block.x = (self.x + block.xOffset) * BLOCK_SIZE
 		block.y = (self.y + block.yOffset) * BLOCK_SIZE
-		print(block.xOffset, block.yOffset.." Created ",self.id)
 	end
-	print(debug.traceback())
-	print(i, os.time())
-	print("\n\n\n")
-	i = i + 1
+	if Debug then
+		print(debug.traceback())
+		print(Tetrominoes.i, os.time())
+		print("\n\n\n")
+	end
+	Tetrominoes.i = Tetrominoes.i + 1
 end
 
 function Tetrominoes:move(x, y)

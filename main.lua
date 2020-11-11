@@ -31,6 +31,7 @@ function love.load()
 	Timer = 0
     love.keyboard.keysPressed = {}
     map = Map()
+    Debug = false
 --    Tetromino = Tetrominoes(I_Block_positions,1, 0)
 end
 
@@ -63,6 +64,8 @@ function love.keypressed(key)
         love.event.quit()
     elseif key == 'f3' then
     	map:debug()
+    elseif key == 'f4' then 
+    	map:stopAll()
     end
 
     love.keyboard.keysPressed[key] = true

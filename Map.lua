@@ -1,5 +1,5 @@
 Map = Class{}
-Map_Debug = false
+
 function Map:init()
 	self.grid = {}
 	for x=1,SCREEN_WIDTH_BLOCKS do
@@ -30,7 +30,7 @@ function Map:render()
 										BLOCK_SIZE-2,
 										BLOCK_SIZE-2)
 			end
-			if Map_Debug then
+			if Debug then
 				love.graphics.setColor(0.5,0.5,0.5,1)
 				love.graphics.setLineWidth(BLOCK_SIZE/10)
 				love.graphics.rectangle('line',
@@ -54,7 +54,7 @@ function Map:update()
 
 		-- Erase
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE] = 0
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
 		end
 
 		--Move
@@ -62,11 +62,13 @@ function Map:update()
 
 		-- Colision detection
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			if self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE ] ~= 0 then
+			if self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE ] ~= 0 then
+
 				for i,Blocks in ipairs(self.Current_Tetromino:getBlocks()) do
-					self.grid[Blocks.x / BLOCK_SIZE ][Blocks.y / BLOCK_SIZE -1] 
+					self.grid[Blocks.x / BLOCK_SIZE][Blocks.y / BLOCK_SIZE -1] 
 					= {self.Current_Tetromino.id}
 				end	
+
 				self:newTetromino()
 				break
 			end
@@ -74,16 +76,15 @@ function Map:update()
 
 		--Stamp
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE ] 
-			= {self.Current_Tetromino.id}
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE ] = {self.Current_Tetromino.id}
 		end	
 
 		--Boundary Collision
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
 			if Block.y / BLOCK_SIZE + 1 > SCREEN_HEIGHT_BLOCKS then
 				self:newTetromino()
+				break
 			end
-			break
 		end	
 	end
 end
@@ -91,17 +92,14 @@ end
 function Map:newTetromino()
 	self.Current_Tetromino = Tetrominoes(positions[math.random(1, #positions)], 1, 0)
 	for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-		if self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE ] ~= 0 and 
-			self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE] [1] ~= 
-			self.Current_Tetromino.id then
+		if self.grid[Block.x / BLOCK_SIZE ][Block.y / BLOCK_SIZE ] ~= 0 then
 			Game_Over = true
 		end
 	end	
 end
 
 function Map:debug()
-	Game_Over = true
-	Map_Debug = true
+	Debug = true
 	for x=1,SCREEN_WIDTH_BLOCKS do
 		for y=1,SCREEN_HEIGHT_BLOCKS do
 			if self.grid[x][y] ~= 0 then
@@ -109,4 +107,8 @@ function Map:debug()
 			end
 		end
 	end
+end
+
+function Map:stopAll()
+	Game_Over = true
 end
