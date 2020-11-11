@@ -1,4 +1,5 @@
 Tetrominoes = Class{}
+i = 0
 
 function Tetrominoes:init(Blocks, x, y)
 	self.Blocks = Blocks
@@ -11,7 +12,12 @@ function Tetrominoes:init(Blocks, x, y)
 		block.parent = self.id
 		block.x = (self.x + block.xOffset) * BLOCK_SIZE
 		block.y = (self.y + block.yOffset) * BLOCK_SIZE
+		print(block.xOffset, block.yOffset.." Created ",self.id)
 	end
+	print(debug.traceback())
+	print(i, os.time())
+	print("\n\n\n")
+	i = i + 1
 end
 
 function Tetrominoes:move(x, y)

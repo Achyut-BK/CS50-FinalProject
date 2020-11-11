@@ -61,6 +61,8 @@ end
 function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
+    elseif key == 'f3' then
+    	map:debug()
     end
 
     love.keyboard.keysPressed[key] = true
