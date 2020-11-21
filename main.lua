@@ -45,6 +45,12 @@ function love.update(dt)
 	end
 	if love.keyboard.wasPressed('a') then
 		map:rotateBlock(1)
+	elseif love.keyboard.wasPressed('right') then
+		map:moveTetromino(1,0)
+	elseif love.keyboard.wasPressed('left') then
+		map:moveTetromino(-1,0)
+	elseif love.keyboard.isDown('down') then
+		map:moveTetromino(0,1)
 	end
 	love.keyboard.keysPressed = {}
 end
@@ -70,6 +76,5 @@ function love.keypressed(key)
     elseif key == 'f4' then 
     	map:stopAll()
     end
-
     love.keyboard.keysPressed[key] = true
 end
