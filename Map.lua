@@ -1,6 +1,8 @@
 Map = Class{}
 UpdateLock = false
 function Map:init()
+
+	-- initialise map's grid to a blank grid
 	self.grid = {}
 	for x=1,SCREEN_WIDTH_BLOCKS do
 		self.grid[x] = {}
@@ -8,8 +10,20 @@ function Map:init()
 			self.grid[x][y] = 0
 		end
 	end
+
+	self.Tetromino = {}
+
 	self:newTetromino()
+
+	print(self.Tetromino)
+	self.Tetromino.erase = function()
+		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
+		end
+	end
+
 end
+
 
 function Map:render()
 	for x=1,SCREEN_WIDTH_BLOCKS do
@@ -52,10 +66,8 @@ end
 function Map:update()
 	if not (Game_Over) and not(UpdateLock) then
 		UpdateLock = true
-		-- Erase
-		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
-		end
+		
+		self.Tetromino.erase()
 
 		--Move
 		self.Current_Tetromino:move(0,1)
@@ -93,10 +105,8 @@ end
 function Map:rotateBlock(x)
 	if not (Game_Over) and not(UpdateLock) then
 		UpdateLock = true
-		-- Erase
-		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
-		end
+
+		self.Tetromino.erase()
 
 		self.Current_Tetromino:rotate(x)
 
@@ -124,10 +134,7 @@ function Map:moveTetromino(x,y)
 	if not (Game_Over) and not(UpdateLock) then
 		UpdateLock = true
 
-		-- Erase
-		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 0
-		end
+		self.Tetromino.erase()
 
 		--Move
 		self.Current_Tetromino:move(x,y)
@@ -209,9 +216,7 @@ function Map:DeleteLines()
 						self.grid[x][y2] = self.grid[x][y2-1]
 					end
 				end
-				print(y2)
 			end
-			print(y)
 		end
 	end
 end

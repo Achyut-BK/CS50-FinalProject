@@ -58,7 +58,7 @@ end
 
 function love.draw()
 	push:apply('start')
-	love.graphics.clear(51/255, 51/255, 153/255)
+	love.graphics.clear({51/255, 51/255, 153/255})
 	map:render()
 --	Tetromino:render()
 	push:apply('end')

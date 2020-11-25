@@ -32,10 +32,10 @@ positions = {Z_Block_positions,
 			J_Block_positions,
 			I_Block_positions}
 
---https://stackoverflow.com/a/26367080/13656598
-function copy(obj)
-    if type(obj) ~= 'table' then return obj end
-    local res = setmetatable({}, getmetatable(obj))
-    for k, v in pairs(obj) do res[copy(k)] = copy(v) end
-    return res
-end
+colours = {{238,34,41}
+		  ,{171,78,160}
+		  ,{65,182,65}
+		  ,{247,212,7}
+		  ,{239,121,34}
+		  ,{90,101,175}
+		  ,{1,240,239}}

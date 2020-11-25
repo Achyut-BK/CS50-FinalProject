@@ -1,13 +1,14 @@
 Tetrominoes = Class{}
 
 Tetrominoes.i = 1
-function Tetrominoes:init(Blocks, x, y)
+function Tetrominoes:init(Blocks, x, y, color)
 	self.Blocks = Blocks
 	self.Current_Block_index =  1
 	self.Current_Blocks = Blocks[self.Current_Block_index]
 	self.x = x
 	self.y = y
 	self.id = os.time()
+	self.color = color
 	for i,block in ipairs(self.Current_Blocks) do
 		block.parent = self.id
 		block.x = (self.x + block.xOffset) * BLOCK_SIZE
