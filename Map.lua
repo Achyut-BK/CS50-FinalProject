@@ -14,7 +14,8 @@ function Map:init()
 	end
 
 	Map.Tetromino.newTetromino = function()
-		self.Current_Tetromino = Tetrominoes(positions[math.random(1, #positions)], 4, 0)
+	local Tetromino_type = math.random(1, #positions)
+		self.Current_Tetromino = Tetrominoes(positions[Tetromino_type], 4, 0, colours[Tetromino_type])
 		self:DeleteLines()
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
 			if self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] ~= 0 then
@@ -33,7 +34,8 @@ function Map:init()
 
 	Map.Tetromino.stamp = function()
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = {self.Current_Tetromino.id}
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = 
+			{self.Current_Tetromino.id,colour = self.Current_Tetromino.colour}
 		end	
 	end
 
@@ -111,14 +113,17 @@ function Map:render()
 	for x=1,SCREEN_WIDTH_BLOCKS do
 		for y=1,SCREEN_HEIGHT_BLOCKS do
 			if self.grid[x][y] ~= 0 then
-				love.graphics.setColor(1,1,1,1)
+				love.graphics.setColor(self.grid[x][y].colour)
 				love.graphics.setLineWidth(1)
 				love.graphics.rectangle('fill',x * BLOCK_SIZE - BLOCK_SIZE,
 										y * BLOCK_SIZE - BLOCK_SIZE,
 										BLOCK_SIZE,
 										BLOCK_SIZE)
 
-				love.graphics.setColor(0.5,0.5,0.5,1)
+				love.graphics.setColor(self.grid[x][y].colour[1]/2,
+										self.grid[x][y].colour[2]/2,
+										self.grid[x][y].colour[3]/2,
+										self.grid[x][y].colour[4]/2)
 				love.graphics.setLineWidth(BLOCK_SIZE/10)
 				love.graphics.rectangle('line',
 										(x)*BLOCK_SIZE - BLOCK_SIZE,
@@ -158,7 +163,8 @@ function Map:update()
 		-- needs to be after erase to  prevent it from smashing itself
 		if self.Tetromino.collides() then
 			for i,Blocks in ipairs(self.Current_Tetromino:getBlocks()) do
-				self.grid[Blocks.x / BLOCK_SIZE][Blocks.y / BLOCK_SIZE-1]={self.Current_Tetromino.id}
+				self.grid[Blocks.x / BLOCK_SIZE][Blocks.y / BLOCK_SIZE-1]=
+				{self.Current_Tetromino.id, colour = self.Current_Tetromino.colour}
 			end	
 			self.Tetromino.newTetromino()
 		end
