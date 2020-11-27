@@ -8,14 +8,6 @@ function Block:init(x, y)
 	self.parent = nil
 end
 
---[[function Block:move(yOffset, xOffset)		-- Kept for Testing & debugging purposes, 
-											-- use the tetrominoes class move instead
-	if self.y < VIRTUAL_HEIGHT-1 then
-		self.y = self.y + yOffset
-	end
-	self.x = self.x + xOffset
-end ]]--
-
 function Block:render()
 	love.graphics.setColor(1,1,1,1)
 	love.graphics.setLineWidth(1)

@@ -33,7 +33,7 @@ function Map:init()
 
 	Map.Tetromino.stamp = function()
 		for i,Block in ipairs(self.Current_Tetromino:getBlocks()) do
-			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE ] = {self.Current_Tetromino.id}
+			self.grid[Block.x / BLOCK_SIZE][Block.y / BLOCK_SIZE] = {self.Current_Tetromino.id}
 		end	
 	end
 
@@ -61,6 +61,47 @@ function Map:init()
 			if Block.y / BLOCK_SIZE > SCREEN_HEIGHT_BLOCKS then
 				return true
 			end
+		end
+	end
+
+	Map.Tetromino.move = function(x,y)
+		if not (Game_Over) and not(UpdateLock) then
+			UpdateLock = true
+
+			self.Tetromino.erase()
+
+			self.Current_Tetromino:move(x,y)
+
+			if self.Tetromino.EdgeCollides() or self.Tetromino.collides() then
+				self.Current_Tetromino:move(-x,-y)
+				self.Tetromino.stamp()
+			end
+
+			self.Tetromino.stamp()
+
+			if self.Tetromino.BaseCollides() then
+				self.Tetromino.newTetromino()
+			end
+
+			UpdateLock = false
+		end
+	end
+
+	Map.Tetromino.rotate = function(x)
+		if not (Game_Over) and not(UpdateLock) then
+			UpdateLock = true
+
+			self.Tetromino.erase()
+
+			self.Current_Tetromino:rotate(x)
+
+			if self.Tetromino.EdgeCollides() or self.Tetromino.collides() then
+				self.Current_Tetromino:rotate(-x)
+			end
+
+			self.Tetromino.stamp()
+
+			UpdateLock = false
 		end
 	end
 end
@@ -117,7 +158,7 @@ function Map:update()
 		-- needs to be after erase to  prevent it from smashing itself
 		if self.Tetromino.collides() then
 			for i,Blocks in ipairs(self.Current_Tetromino:getBlocks()) do
-				self.grid[Blocks.x / BLOCK_SIZE][Blocks.y / BLOCK_SIZE-1]= {self.Current_Tetromino.id}
+				self.grid[Blocks.x / BLOCK_SIZE][Blocks.y / BLOCK_SIZE-1]={self.Current_Tetromino.id}
 			end	
 			self.Tetromino.newTetromino()
 		end
@@ -125,47 +166,6 @@ function Map:update()
 		self.Tetromino.stamp()
 
 		if self.Tetromino.BaseCollides() then
-			self.Tetromino.newTetromino()
-		end
-
-		UpdateLock = false
-	end
-end
-
-function Map:rotateBlock(x)
-	if not (Game_Over) and not(UpdateLock) then
-		UpdateLock = true
-
-		self.Tetromino.erase()
-
-		self.Current_Tetromino:rotate(x)
-
-		if self.Tetromino.EdgeCollides() or self.Tetromino.collides() then
-			self.Current_Tetromino:rotate(-x)
-		end
-
-		self.Tetromino.stamp()
-
-		UpdateLock = false
-	end
-end
-
-function Map:moveTetromino(x,y)
-	if not (Game_Over) and not(UpdateLock) then
-		UpdateLock = true
-
-		self.Tetromino.erase()
-
-		self.Current_Tetromino:move(x,y)
-
-		if self.Tetromino.EdgeCollides() or self.Tetromino.collides() then
-			self.Current_Tetromino:move(-x,-y)
-			self.Tetromino.stamp()
-		end
-
-		Map.Tetromino.stamp()
-
-		if Map.Tetromino.BaseCollides() then
 			self.Tetromino.newTetromino()
 		end
 
@@ -188,19 +188,22 @@ function Map:stopAll()
 	Game_Over = true
 end
 
-function Map:DeleteLines()
-	for y=1,SCREEN_HEIGHT_BLOCKS do
-		full = true
-		for x=1,SCREEN_WIDTH_BLOCKS do
-			if self.grid[x][y] == 0 then
-				full = false
-			end
+function Map:LineIsFull(y)
+	for x=1, SCREEN_WIDTH_BLOCKS do
+		if self.grid[x][y] == 0 then
+			return false
 		end
-		if full == true then
-			for y2=SCREEN_HEIGHT_BLOCKS,SCREEN_HEIGHT_BLOCKS-y, -1 do
-				for x=1,SCREEN_WIDTH_BLOCKS do 
-					if y2 > 1 then
-						self.grid[x][y2] = self.grid[x][y2-1]
+	end
+	return true
+end
+
+function Map:DeleteLines()
+	for i=1,SCREEN_HEIGHT_BLOCKS do
+		if self:LineIsFull(i) then
+			for i2 = i, 1, -1 do
+				for x = 1, SCREEN_WIDTH_BLOCKS do
+					if i2 - 1 > 0 then
+						self.grid[x][i2] = self.grid[x][i2-1]
 					end
 				end
 			end

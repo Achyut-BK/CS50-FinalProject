@@ -44,13 +44,15 @@ function love.update(dt)
 		Timer = Timer - MOVE_INTERVAL
 	end
 	if love.keyboard.wasPressed('a') then
-		map:rotateBlock(1)
+		map.Tetromino.rotate(1)
+	elseif love.keyboard.wasPressed('d') then
+		map.Tetromino.rotate(-1)
 	elseif love.keyboard.wasPressed('right') then
-		map:moveTetromino(1,0)
+		map.Tetromino.move(1,0)
 	elseif love.keyboard.wasPressed('left') then
-		map:moveTetromino(-1,0)
+		map.Tetromino.move(-1,0)
 	elseif love.keyboard.isDown('down') then
-		map:moveTetromino(0,1)
+		map.Tetromino.move(0,1)
 	end
 	love.keyboard.keysPressed = {}
 end
