@@ -32,6 +32,8 @@ function love.load()
     love.keyboard.keysPressed = {}
     map = Map()
     Debug = false
+    EndFont = love.graphics.newFont('font.ttf',1.85*BLOCK_SIZE)
+    ScoreFont = love.graphics.newFont('font.ttf',1*BLOCK_SIZE)
 --    Tetromino = Tetrominoes(I_Block_positions,1, 0)
 end
 
@@ -55,6 +57,7 @@ function love.update(dt)
 		map.Tetromino.move(0,1)
 	end
 	love.keyboard.keysPressed = {}
+	map.Audio.playMusic()
 end
 
 

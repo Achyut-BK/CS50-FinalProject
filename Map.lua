@@ -3,7 +3,7 @@ UpdateLock = false
 Map.Tetromino = {}
 
 function Map:init()
-
+	score = 0
 	-- initialise map's grid to a blank grid
 	self.grid = {}
 	for x=1,SCREEN_WIDTH_BLOCKS do
@@ -106,6 +106,26 @@ function Map:init()
 			UpdateLock = false
 		end
 	end
+	Map.Audio = {}
+
+	Map.Audio[1] = love.audio.newSource("Music/Original.ogg", "stream") 
+	Map.Audio[2] = love.audio.newSource("Music/Violin And Guitar.ogg", "stream")
+	Map.Audio[3] = love.audio.newSource("Music/Piano.ogg", "stream")
+	Map.Audio[4] = love.audio.newSource("Music/Guitar.ogg", "stream")
+	Map.Audio[5] = love.audio.newSource("Music/harder and H A R D E R.ogg", "stream")
+	Map.Audio[6] = love.audio.newSource("Music/Rock.ogg", "stream")
+	Map.Audio[7] = love.audio.newSource("Music/Metal.ogg", "stream")
+
+	Map.Audio.CurrentIndex = 1
+	Map.Audio.Current = Map.Audio[Map.Audio.CurrentIndex]
+	Map.Audio[Map.Audio.CurrentIndex]:play()
+
+	Map.Audio.playMusic = function()
+		if not Map.Audio[Map.Audio.CurrentIndex]:isPlaying() then
+			Map.Audio.CurrentIndex = Map.Audio.CurrentIndex +  math.floor(score / 10) 
+			Map.Audio[Map.Audio.CurrentIndex]:play()
+		end
+	end
 end
 
 
@@ -131,19 +151,18 @@ function Map:render()
 										BLOCK_SIZE-2,
 										BLOCK_SIZE-2)
 			end
-			if Debug then
 				love.graphics.setColor(0.5,0.5,0.5,1)
-				love.graphics.setLineWidth(BLOCK_SIZE/10)
+				love.graphics.setLineWidth(BLOCK_SIZE/100)
 				love.graphics.rectangle('line',
 										(x)*BLOCK_SIZE - BLOCK_SIZE,
 										(y)*BLOCK_SIZE - BLOCK_SIZE,
 										BLOCK_SIZE-2,
 										BLOCK_SIZE-2)
-			end
+				love.graphics.setFont(ScoreFont)
+				love.graphics.print(score)
 		end
 	end
 	if Game_Over then
-		EndFont = love.graphics.newFont('font.ttf',128)
 		love.graphics.setFont(EndFont)
 		love.graphics.print("Game Over")
 	end 
@@ -206,6 +225,7 @@ end
 function Map:DeleteLines()
 	for i=1,SCREEN_HEIGHT_BLOCKS do
 		if self:LineIsFull(i) then
+			score = score+1
 			for i2 = i, 1, -1 do
 				for x = 1, SCREEN_WIDTH_BLOCKS do
 					if i2 - 1 > 0 then
