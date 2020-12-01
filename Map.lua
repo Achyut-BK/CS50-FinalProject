@@ -125,7 +125,7 @@ function Map:init()
 	Map.Audio.playMusic = function()
 		if not Map.Audio[Map.Audio.CurrentIndex]:isPlaying() then
 			Map.Audio.CurrentIndex = Map.Audio.CurrentIndex +  math.floor(score / 10)
-			if Map.Audio.CurrentIndex > 8 then Map.Audio.CurrentIndex = 8 end
+			if Map.Audio.CurrentIndex > 8 then Map.Audio.CurrentIndex = math.random(5,8) end
 			Map.Audio[Map.Audio.CurrentIndex]:play()
 		end
 	end
