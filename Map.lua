@@ -115,6 +115,8 @@ function Map:init()
 	Map.Audio[5] = love.audio.newSource("Music/harder and H A R D E R.ogg", "stream")
 	Map.Audio[6] = love.audio.newSource("Music/Rock.ogg", "stream")
 	Map.Audio[7] = love.audio.newSource("Music/Metal.ogg", "stream")
+	Map.Audio[8] = love.audio.newSource("Music/Acapella.ogg", "stream")
+
 
 	Map.Audio.CurrentIndex = 1
 	Map.Audio.Current = Map.Audio[Map.Audio.CurrentIndex]
@@ -122,7 +124,8 @@ function Map:init()
 
 	Map.Audio.playMusic = function()
 		if not Map.Audio[Map.Audio.CurrentIndex]:isPlaying() then
-			Map.Audio.CurrentIndex = Map.Audio.CurrentIndex +  math.floor(score / 10) 
+			Map.Audio.CurrentIndex = Map.Audio.CurrentIndex +  math.floor(score / 10)
+			if Map.Audio.CurrentIndex > 8 then Map.Audio.CurrentIndex = 8 end
 			Map.Audio[Map.Audio.CurrentIndex]:play()
 		end
 	end
